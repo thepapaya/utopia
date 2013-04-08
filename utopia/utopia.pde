@@ -10,8 +10,7 @@ int showingmember = -1;
 
 PImage img;
 
-//Julian's comment
-
+/* Test Comment */
 
 
 void setup()
