@@ -22,7 +22,7 @@ void setup()
     int familysize = int(random(10, 16));
     for (int j = 0; j < familysize; j++)
     {
-      persons[i][j] = new Person(i, j, random(width), random(height), random(-2,2), random (-2,2), 10,  0, null, int(random(0,2)), null, null, 10);
+      persons[i][j] = new Person(i, j, random(width), random(height), random(-2,2), random (-2,2), 15,  0, null, int(random(0,2)), null, null, 10);
       population ++;
     }
   } 
@@ -101,7 +101,7 @@ class Person
         showText();
         return;
       }
-      else if (showingfam == -1)
+      else if (showingfam == -1 && showingmember == -1)
       {
         showingfam = familyid;
         showingmember = member;
@@ -109,9 +109,10 @@ class Person
         return;
       }
     }
-    if(showingfam == familyid)
+    if(showingfam == familyid && showingmember == member)
     {
       showingfam = -1;
+      showingmember = -1;
     }
     
     //randomly move around
@@ -131,7 +132,13 @@ class Person
   
   void showText()
   {
-    rect(x, y, 20, 10, 7);
+    fill(255);
+    rect(x, y, 150, 60, 7);
+    fill(128);
+    text("FamilyID: "+familyid, x+5, y+25);
+    text("Member: "+member, x+5, y+38);
+   
+    
   }
   
 }
