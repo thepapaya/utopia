@@ -5,23 +5,33 @@
 int NUMFAMILIES = int(random(0, 100));
 Person [][] persons = new Person [NUMFAMILIES][16];
 int population = 0;
+int showingfam = -1; // on-off for info display
+int showingmember = -1;
+
+PImage img;
+
+
 
 void setup()
 {
   //set up map
+  //img = loadImage("utopia_map_square800.jpg");
   size(800, 800);
   for (int i = 0; i < NUMFAMILIES; i++)
   {
     int familysize = int(random(10, 16));
     for (int j = 0; j < familysize; j++)
-      persons[i][j] = new Person(j, random(width), random(height), random(-2,2), random (-2,2), 10,  0, null, int(random(0,2)), null, null, 10);
+    {
+      persons[i][j] = new Person(i, j, random(width), random(height), random(-2,2), random (-2,2), 10,  0, null, int(random(0,2)), null, null, 10);
       population ++;
+    }
   } 
 }
 
 //continuously runs until program is cancelled 
 void draw(){
-  background(0);
+  //background(img);
+  background(255);
   for (int i = 0; i < persons.length; i++)
   {
     for (int j = 0; j < persons[i].length; j++)
@@ -33,12 +43,14 @@ void draw(){
       }
     }
   }
+  if (showingfam != -1 && showingmember != -1)
+    persons[showingfam][showingmember].showText();
 }
 
 class Person
 {
-  int id;
   int familyid;
+  int member;
   float x, y, vx, vy;
   float diameter;
   int workyr; // 0, 1st or 2nd year of country work
@@ -49,10 +61,11 @@ class Person
   Person mother;
   int age;
   
-  Person(int familyid, float x, float y, float vx, float vy, float diameter, int area,
+  Person(int familyid, int member, float x, float y, float vx, float vy, float diameter, int area,
       String trade, int gender, Person father, Person mother, int age)
   {
     this.familyid = familyid;
+    this.member = member;
     this.x = x;
     this.y = y;
     this.vx = vx;
@@ -69,14 +82,37 @@ class Person
   
   void display()
   {
-    fill(255, 255, 0, 180);
+    if (gender == 0)
+      fill(255, 51, 153, 180);
+    else
+      fill(51, 51, 255, 180);
     ellipse(x, y, diameter, diameter);
   }
   
   void move()
   {
-    float dist = sqrt(sq(mouseX-x)+sq(mouseY-y));
+    
     //check if mouse is hovering
+    float dist = sqrt(sq(mouseX-x)+sq(mouseY-y));
+    if(dist < diameter)
+    {
+      if(showingfam == familyid && showingmember == member)
+      {
+        showText();
+        return;
+      }
+      else if (showingfam == -1)
+      {
+        showingfam = familyid;
+        showingmember = member;
+        showText();
+        return;
+      }
+    }
+    if(showingfam == familyid)
+    {
+      showingfam = -1;
+    }
     
     //randomly move around
     if((y > height) || (y < 0 ))
@@ -91,6 +127,11 @@ class Person
     x += vx; 
     y += vy;
   
+  }
+  
+  void showText()
+  {
+    rect(x, y, 20, 10, 7);
   }
   
 }
