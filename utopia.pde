@@ -2,8 +2,16 @@
 
 //set random initial population
 // num families should actually range from 1 to 6000
-int NUMFAMILIES = int(random(0, 100));
-Person [][] persons = new Person [NUMFAMILIES][16];
+int NUMFAMILIES = 3;
+//TODO: add country families
+int year = 0;
+int TIMEINTERVAL = 2000;
+int lastTime = 0;
+//yearTimer yt;
+//Person [][] persons = new Person [NUMFAMILIES][16];
+
+ArrayList<ArrayList> families = new ArrayList<ArrayList>();
+
 int population = 0;
 int showingfam = -1; // on-off for info display
 int showingmember = -1;
@@ -17,21 +25,54 @@ void setup()
   //set up map
   //img = loadImage("utopia_map_square800.jpg");
   size(800, 800);
+//  yt = new yearTimer();
+//  yt.start();
+  lastTime = millis();
   for (int i = 0; i < NUMFAMILIES; i++)
   {
-    int familysize = int(random(10, 16));
+    int familysize = int(random(2, 5));
+    ArrayList family = new ArrayList();
     for (int j = 0; j < familysize; j++)
     {
-      persons[i][j] = new Person(i, j, random(width), random(height), random(-2,2), random (-2,2), 15,  0, null, int(random(0,2)), null, null, 10);
+      family.add(new Person(i, j, random(width), random(height), random(-2,2), random (-2,2), 15,  0, null, int(random(0,2)), null, null, 10));
       population ++;
     }
+    families.add(family);
+    println(family.size());
   } 
 }
 
 //continuously runs until program is cancelled 
 void draw(){
   //background(img);
+  
+  
   background(255);
+  textAlign(CENTER);
+  fill(50);
+  text("Year: " + year, 150, 175);
+  /*
+  for (int i = 0; i < families.size(); i++)
+  {
+    //ArrayList curr = families.get(i);
+    //println(curr.size());
+    
+    for (int j = 0; j < families.get(i).size(); j++)
+    {
+      text("hello", 150, 175 - 5*i*j);
+    }
+    
+    */
+  }
+  
+  if(millis() - lastTime > TIMEINTERVAL)
+  {
+        year++;
+        //println("year:" + year); // this is working
+        lastTime = millis();
+  }
+  /*
+  //drawing the floating people
   for (int i = 0; i < persons.length; i++)
   {
     for (int j = 0; j < persons[i].length; j++)
@@ -45,7 +86,39 @@ void draw(){
   }
   if (showingfam != -1 && showingmember != -1)
     persons[showingfam][showingmember].showText();
+  */
 }
+
+
+
+//not using yearTimer now
+class yearTimer {
+  //source: http://forum.processing.org/topic/timer-in-processing
+  int startTime = 0, stopTime = 0;
+  boolean running = false;
+  void start() {
+    startTime = millis();
+    running = true;
+  }
+  void stop() {
+    stopTime = millis();
+    running = false;
+  }
+  int getElapsedTime() {
+    int elapsed;
+    if (running) {
+      elapsed = (millis() - startTime);
+    }
+    else {
+      elapsed = (stopTime - startTime);
+    }
+    return elapsed;
+  }
+  int second() {
+    return (getElapsedTime() / 1000) % 60;
+  }
+}
+
 
 class Person
 {
