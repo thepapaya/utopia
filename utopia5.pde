@@ -1,3 +1,5 @@
+boolean pause = false;
+
 //constants we set 
 int INIThouseholds = 10; // num households should actually range from 1 to 6000
 float MARRIAGEPROB = 1;
@@ -5,6 +7,7 @@ int MOTHERMAXAGE = 45;
 int FATHERMAXAGE = 70;
 int LIFEEXPECTANCY = 100; // TODO: IMPLEMENT THIS
 float FERTILITYRATE = .25;
+int INITMAXHOUSEHOLDSIZE = 8;
 
 
 //constants set in Utopia
@@ -56,41 +59,7 @@ void setup()
   lastTime = millis();
 
 
-  for (int i = 0; i < INIThouseholds; i++)
-  {
-    //this is our choice (householdsize)
-    int householdsize = int(random(2, 8));
-
-    //create new household
-    ArrayList household = new ArrayList();
-    for (int j = 0; j < householdsize; j++)
-    {
-      if (j == 0)
-      {
-        //add mother
-        household.add(new Person(i, j, (String) peopletype[1], random(width), random(height), random(-2, 2), random (-2, 2), 15, 0, null, genders[0], null, null, int(random(18, 60))));
-        femalepop++;
-      }
-      else if (j == 1)
-      {
-        //add father
-        household.add(new Person(i, j, (String) peopletype[1], random(width), random(height), random(-2, 2), random (-2, 2), 15, 0, null, genders[1], null, null, int(random(18, 60))));
-        malepop++;
-      }
-      else
-      {
-        Person np = new Person(i, j, (String) peopletype[0], random(width), random(height), random(-2, 2), random (-2, 2), 15, 0, null, genders[int(random(0, 2))], null, null, int(random(10, 60)));
-        household.add(np);
-        if (np.gender == "m")
-          malepop++;
-        else
-          femalepop++;
-      }  
-      population++;
-    }
-    households.add(household);
-    numhouseholds++;
-  }
+  startHouseholds();
   println("total number of households" + households.size());
 }
 
