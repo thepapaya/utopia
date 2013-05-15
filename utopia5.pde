@@ -5,7 +5,7 @@ int INIThouseholds = 3; // num households should actually range from 1 to 6000
 float MARRIAGEPROB = 1;
 int MOTHERMAXAGE = 45;
 int FATHERMAXAGE = 70;
-int LIFEEXPECTANCY = 100; // TODO: IMPLEMENT THIS
+int LIFEEXPECTANCY = 85; 
 float FERTILITYRATE = .25;
 int INITMAXHOUSEHOLDSIZE = 8;
 
@@ -19,7 +19,7 @@ int MALEMARRIAGEAGE = 22;
 
 //our counters
 int year = 0;
-int TIMEINTERVAL = 2000;
+int TIMEINTERVAL = 500;
 int lastTime = 0;
 int malepop = 0;
 int femalepop = 0;
@@ -174,6 +174,9 @@ void draw() {
               //  print("added bachelor\n");
             }
           }
+          
+          if (random(1) < curr.age / LIFEEXPECTANCY)
+            households.get(curr.householdID).remove(curr);
         }
       }
 
@@ -190,7 +193,7 @@ void draw() {
         //husband.diameter, husband.area, husband.trade, husband.gender, husband.father, husband.mother, husband.age);
         // temphusband.householdID = numhouseholds;
         Person tempwife = new Person(wife.householdID, households.get(husband.householdID).size(), "married", wife.x, wife.y, wife.vx, wife.vy, 
-        wife.diameter, wife.area, wife.trade, wife.gender, wife.father, wife.mother, wife.age);
+        wife.diameter, wife.area, wife.trade, wife.gender, wife.father, wife.mother, husband, wife.age);
 
         households.get(wife.householdID).remove(wife);
         tempwife.householdID = husband.householdID;
@@ -201,6 +204,7 @@ void draw() {
         // numhouseholds++;
         households.get(husband.householdID).add(tempwife);
         husband.status = "married";
+        husband.spouse = tempwife;
       }
 
 
@@ -215,7 +219,7 @@ void draw() {
           if (random(1) <= FERTILITYRATE)
           {
             Person baby = new Person(mother.householdID, households.get(i).size(), "unmarried", mother.x, mother.y, mother.vx, mother.vy, 
-            mother.diameter, mother.area, father.trade, genders[int(random(0, 2))], father, mother, 0);
+            mother.diameter, mother.area, father.trade, genders[int(random(0, 2))], father, mother, null, 0);
             households.get(i).add(baby);
           }
         }
