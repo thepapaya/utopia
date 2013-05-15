@@ -1,5 +1,27 @@
 
 
+
+void findCouple()
+{
+  // find a pair to marry
+  if (bachelorettes.size() > 0)
+  {
+    wife = bachelorettes.get(int(random(bachelorettes.size())));
+    if (bachelors.size() > 0)
+    {
+      do
+      {
+        husband = bachelors.get(int(random(bachelors.size())));
+        //   print("husband:" + husband);
+      }
+      while (wife.householdID == husband.householdID);
+    }
+  }
+}
+
+
+// startHouseholds() is used to set up the correct number of 
+// households at the start of the program according to our constants
 void startHouseholds()
 {
   for (int i = 0; i < INIThouseholds; i++)
@@ -38,4 +60,6 @@ void startHouseholds()
     numhouseholds++;
   }
 }
+
+
 
