@@ -1,30 +1,34 @@
 boolean pause = false;
 
-//constants we set 
-int INIThouseholds = 3; // num households should actually range from 1 to 6000
-float MARRIAGEPROB = 1;
-int MOTHERMAXAGE = 45;
-int FATHERMAXAGE = 70;
-int LIFEEXPECTANCY = 85; 
-float FERTILITYRATE = .25;
-int INITMAXHOUSEHOLDSIZE = 8;
-
 
 //constants set in Utopia
 int FEMALEMARRIAGEAGE = 18;
 int MALEMARRIAGEAGE = 22;
+int MINHOUSEHOLDSIZE = 10;
+int MAXHOUSEHOLDSIZE = 16;
 
 //TODO: add country households
 
-
 //our counters
 int year = 0;
-int TIMEINTERVAL = 500;
+int TIMEINTERVAL = 1500;
 int lastTime = 0;
 int malepop = 0;
 int femalepop = 0;
 Person wife = null;
 Person husband = null;
+int numhouseholds = 0;
+int population = 0;
+int showingfam = -1; // on-off for info display
+int showingmember = -1;
+
+//constants we set 
+int INIThouseholds = 2; // num households should actually range from 1 to 6000
+float MARRIAGEPROB = 1;
+int MOTHERMAXAGE = 45;
+int FATHERMAXAGE = 70;
+int LIFEEXPECTANCY = 85; 
+float FERTILITYRATE = .25;
 
 //types of people
 String[] genders = {
@@ -35,32 +39,34 @@ String[] peopletype = {
 };
 
 //types of trades
-String[] trades = {
+String[] maletrades = {
+  "masonry", "smith", "carpenter", "manufacturing"
+};
+String[] femaletrades = {
+  "masonry", "smith", "carpenter", "manufacturing"
 };
 
+//add domestic work, like agriculture
+
+//our dynamic lists
 ArrayList<ArrayList> households = new ArrayList<ArrayList>();
 ArrayList<Person> bachelorettes = new ArrayList<Person>();
 ArrayList<Person> bachelors = new ArrayList<Person>();
-
-int numhouseholds = 0;
-int population = 0;
-int showingfam = -1; // on-off for info display
-int showingmember = -1;
-
-PImage img;
+ArrayList<Person []> couples = new ArrayList<Person []>();
+//PImage img;
 
 
-//this is run once at the beginning of the program. ADD MORE HERE 
+// setup() is run once at the beginning of the program.
+// it sets the size of the display screen and calls startHouseholds() 
 void setup()
 {
   //set up map
   //img = loadImage("utopia_map_square800.jpg");
-  size(1200, 800);
+  size(1200, 2000);
   //  yt = new yearTimer();
   //  yt.start();
   lastTime = millis();
   startHouseholds();
-  println("total number of households" + households.size());
 }
 
 //continuously runs until program is cancelled 
@@ -76,6 +82,8 @@ void draw() {
   text("Population: " + population, 150, 130);
   text("Males: " + malepop, 150, 140);
   text("Females: " + femalepop, 150, 150);
+  text("Households: " + households.size(), 150, 160);
+  text("married couples: "+couples.size(), 150, 170);
 
   int ycoordinate = 200;
   int bachelorsy = 200;
@@ -174,53 +182,68 @@ void draw() {
               //  print("added bachelor\n");
             }
           }
-          
+
           if (random(1) < curr.age / LIFEEXPECTANCY)
             households.get(curr.householdID).remove(curr);
         }
       }
 
-
-
-      findCouple();
-
-      //marry the pair we chose, start a new household
-      if (husband != null && wife != null)
+      //SET ANNUAL MARRIAGE RATE HERE.
+      // right now, there are numhouseholds/2 happening every year
+      for (int i = 0; i < numhouseholds/2; i++)
       {
-        println("couple: husband-" + "(" + husband.householdID +"," + husband.member +")" + 
-          " wife-" + "(" + wife.householdID + "," + wife.member + ")");
-        // Person temphusband = new Person(husband.householdID, husband.member, "married", husband.x, husband.y, husband.vx, husband.vy, 
-        //husband.diameter, husband.area, husband.trade, husband.gender, husband.father, husband.mother, husband.age);
-        // temphusband.householdID = numhouseholds;
-        Person tempwife = new Person(wife.householdID, households.get(husband.householdID).size(), "married", wife.x, wife.y, wife.vx, wife.vy, 
-        wife.diameter, wife.area, wife.trade, wife.gender, wife.father, wife.mother, husband, wife.age);
+        wife = null;
+        husband = null;
+        findCouple();
 
-        households.get(wife.householdID).remove(wife);
-        tempwife.householdID = husband.householdID;
-        //    ArrayList<Person> newhousehold = new ArrayList<Person>();
-        //     newhousehold.add(tempwife);
-        //    newhousehold.add(temphusband);
-        //    households.add(newhousehold);
-        // numhouseholds++;
-        households.get(husband.householdID).add(tempwife);
-        husband.status = "married";
-        husband.spouse = tempwife;
+        //marry the pair we chose, start a new household
+        if (husband != null && wife != null)
+        {
+          // println("couple: husband-" + "(" + husband.householdID +"," + husband.member +")" + 
+          //  " wife-" + "(" + wife.householdID + "," + wife.member + ")");
+
+
+          // Person temphusband = new Person(husband.householdID, husband.member, "married", husband.x, husband.y, husband.vx, husband.vy, 
+          //husband.diameter, husband.area, husband.trade, husband.gender, husband.father, husband.mother, husband.age);
+          // temphusband.householdID = numhouseholds;
+          Person tempwife = new Person(wife.householdID, households.get(husband.householdID).size(), "married", wife.x, wife.y, wife.vx, wife.vy, 
+          wife.diameter, wife.area, wife.trade, wife.gender, wife.father, wife.mother, husband, wife.age);
+
+          households.get(wife.householdID).remove(wife);
+          tempwife.householdID = husband.householdID;
+          //    ArrayList<Person> newhousehold = new ArrayList<Person>();
+          //     newhousehold.add(tempwife);
+          //    newhousehold.add(temphusband);
+          //    households.add(newhousehold);
+          // numhouseholds++;
+          households.get(husband.householdID).add(tempwife);
+          husband.status = "married";
+          husband.spouse = tempwife;
+          Person[] newcouple = {husband, tempwife};
+          couples.add(newcouple);
+        }
       }
 
-
-      //childbirth
-      for (int i = 0; i < households.size(); i++)
+      println("couples: " + couples);
+      //childbirth FIX THIS
+      
+      for (int i = 0; i < couples.size(); i++)
       {
-        Person mother = (Person) households.get(i).get(0);
-        Person father = (Person) households.get(i).get(1);
+        println("couple #:" + i);
+        print(couples.get(i)[0]);
+        print(couples.get(i)[1]);
+        
+        Person father = couples.get(i)[0];
+        Person mother = couples.get(i)[1];
+        
 
         if (mother.age <= MOTHERMAXAGE && father.age <= FATHERMAXAGE)
         {
           if (random(1) <= FERTILITYRATE)
           {
-            Person baby = new Person(mother.householdID, households.get(i).size(), "unmarried", mother.x, mother.y, mother.vx, mother.vy, 
+            Person baby = new Person(mother.householdID, households.get(mother.householdID).size(), "unmarried", mother.x, mother.y, mother.vx, mother.vy, 
             mother.diameter, mother.area, father.trade, genders[int(random(0, 2))], father, mother, null, 0);
-            households.get(i).add(baby);
+            households.get(mother.householdID).add(baby);
           }
         }
       }
@@ -271,7 +294,8 @@ void draw() {
   }
 }
 
-
+// keyPressed() keeps track of whether the user
+// has pressed the ENTER key. if yes, the program will pause/resume
 void keyPressed()
 {
   if (keyCode == ENTER)
