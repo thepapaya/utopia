@@ -129,13 +129,8 @@ void draw() {
           population++;
           Person curr;
           curr = ((Person)((households.get(i)).get(j)));
-          
-          if (curr.gender == "m")
-            malepop++;
-          else
-            femalepop++;
+          tallyGender(curr);
           curr.age++;
-
           countTrades(curr);
           fillEligibleList(curr);        
           death(curr);
