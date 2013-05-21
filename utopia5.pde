@@ -20,6 +20,10 @@ int numhouseholds = 0;
 int population = 0;
 int showingfam = -1; // on-off for info display
 int showingmember = -1;
+int masons = 0;
+int smiths = 0;
+int carpenters = 0;
+int manufacturers = 0;
 
 //constants we set 
 int INIThouseholds = 4; // num households should actually range from 1 to 6000
@@ -39,10 +43,10 @@ String[] peopletype = {
 
 //types of trades
 String[] maletrades = {
-  "masonry", "smith", "carpenter", "manufacturing"
+  "mason", "smith", "carpenter", "manufacturer"
 };
 String[] femaletrades = {
-  "masonry", "smith", "carpenter", "manufacturing"
+  "mason", "smith", "carpenter", "manufacturer"
 };
 
 //add domestic work, like agriculture
@@ -61,7 +65,7 @@ void setup()
 {
   //set up map
   //img = loadImage("utopia_map_square800.jpg");
-  size(1200, 2000);
+  size(1200, 800);
   //  yt = new yearTimer();
   //  yt.start();
   lastTime = millis();
@@ -83,6 +87,10 @@ void draw() {
   text("Females: " + femalepop, 150, 150);
   text("Households: " + households.size(), 150, 160);
   text("married couples: "+couples.size(), 150, 170);
+  text("carpenters: " + carpenters, 300, 100);
+  text("masons:" + masons, 300, 110);
+  text("manufacturers: "+ manufacturers, 300, 120);
+  text("smiths: " + smiths, 300, 130);
 
 
   int ycoordinate = 200;
@@ -108,6 +116,12 @@ void draw() {
 
       malepop = 0;
       femalepop = 0;
+      
+      masons = 0;
+      carpenters = 0;
+      smiths = 0;
+      manufacturers = 0;
+      
       for (int i = 0; i < households.size(); i++)
       {
         for (int j = 0; j < households.get(i).size(); j++)
@@ -122,7 +136,7 @@ void draw() {
             femalepop++;
           curr.age++;
 
-
+          countTrades(curr);
           fillEligibleList(curr);        
           death(curr);
         }
