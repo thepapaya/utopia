@@ -107,11 +107,6 @@ void draw() {
       wife = null;
       husband = null;
 
-      // tallyPopulation() takes an updated count of the number of 
-      // males, females, bachelors, and bachelorettes in the population
-      // It also updates the age of the individuals
-
-
       malepop = 0;
       femalepop = 0;
       for (int i = 0; i < households.size(); i++)
@@ -141,56 +136,7 @@ void draw() {
 }
 
 
-void showPopulation()
-{ 
-  int ycoordinate = 200;
-  int bachelorsy = 200;
-  int bachelorettesy = 200;
 
-  //print bachelors
-  for (int i = 0; i < bachelors.size(); i++)
-  {
-    text(" householdID:" + ((Person)(bachelors.get(i))).householdID +
-      " member:" + ((Person)(bachelors.get(i))).member +
-      " gender:" + ((Person)(bachelors.get(i))).gender +
-      " status:" + ((Person)(bachelors.get(i))).status +
-      " age:" + ((Person)(bachelors.get(i))).age
-      , 600, bachelorsy);
-    bachelorsy += 15;
-  }
-
-
-  //print bachelorettes
-  for (int i = 0; i < bachelorettes.size(); i++)
-  {
-    text(" householdID:" + ((Person)(bachelorettes.get(i))).householdID +
-      " member:" + ((Person)(bachelorettes.get(i))).member +
-      " gender:" + ((Person)(bachelorettes.get(i))).gender +
-      " status:" + ((Person)(bachelorettes.get(i))).status +
-      " age:" + ((Person)(bachelorettes.get(i))).age
-      , 1000, bachelorettesy);
-    bachelorettesy += 15;
-  }
-
-  //print entire population
-  for (int i = 0; i < households.size(); i++)
-  {
-    //ArrayList curr = households.get(i);
-    //println(curr.size());
-    for (int j = 0; j < households.get(i).size(); j++)
-    {
-
-      ((Person)((households.get(i)).get(j))).member = j;
-      text(" householdID:" + ((Person)((households.get(i)).get(j))).householdID +
-        " member:" + ((Person)((households.get(i)).get(j))).member +
-        " gender:" + ((Person)((households.get(i).get(j)))).gender +
-        " status:" + ((Person)((households.get(i).get(j)))).status +
-        " age:" + ((Person)((households.get(i).get(j)))).age
-        , 200, ycoordinate);
-      ycoordinate += 15;
-    }
-  }
-}
 
 // keyPressed() keeps track of whether the user
 // has pressed the ENTER key. if yes, the program will pause/resume
@@ -239,6 +185,7 @@ void marriage()
  */
 
 //not using yearTimer now
+/*
 class yearTimer {
   //source: http://forum.processing.org/topic/timer-in-processing
   int startTime = 0, stopTime = 0;
@@ -265,4 +212,5 @@ class yearTimer {
     return (getElapsedTime() / 1000) % 60;
   }
 }
+*/
 
