@@ -33,6 +33,6 @@ population.pde
 is a list of functions having to do with the population dynamics of Utopia. These are organized alphabetically, and called from the utopia.pde file. They interact with global variables defined in utopia.pde as well as individual Persons that are passed into the function (like in tallyGender(Person curr)) for example. 
 
 Next Steps
-The next step in population dynamics is to simulate country households and facilitate the emigration between households once households reach their maximum size. Besides population dynamics, there are many different aspects of Utopia to simulate. These include work, politics, social affairs, and leisure among others. Expanding on the implementation of work seems like the best next step because of its importance in the world of Utopia. Take a look at notes here to look at references in Utopia.
+The next step in population dynamics is to simulate country households and facilitate the emigration between households once households reach their maximum size. Besides population dynamics, there are many different aspects of Utopia to simulate. These include work, politics, social affairs, and leisure among others. Expanding on the implementation of work seems like the best next step because of its importance in the world of Utopia. Take a look at notes here to look at references in Utopia. http://bit.ly/utopianotes
 
 
