@@ -143,75 +143,17 @@ void draw() {
               //  print("added bachelor\n");
             }
           }
+          
+          death(curr);
 
-          if (random(1) < curr.age / LIFEEXPECTANCY)
-            households.get(curr.householdID).remove(curr);
+
         }
       }
-      //SET ANNUAL MARRIAGE RATE HERE.
-      // right now, there are numhouseholds/4 happening every year
-      for (int i = 0; i < numhouseholds/4; i++)
-      {
-        wife = null;
-        husband = null;
-        findCouple();
-        println("marriage");
-        println(wife);
-        println(husband);
-        //marry the pair we chose, start a new household
-        if (husband != null && wife != null)
-        {
-          // println("couple: husband-" + "(" + husband.householdID +"," + husband.member +")" + 
-          //  " wife-" + "(" + wife.householdID + "," + wife.member + ")");
+      marriage();
 
-
-          // Person temphusband = new Person(husband.householdID, husband.member, "married", husband.x, husband.y, husband.vx, husband.vy, 
-          //husband.diameter, husband.area, husband.trade, husband.gender, husband.father, husband.mother, husband.age);
-          // temphusband.householdID = numhouseholds;
-          Person tempwife = new Person(wife.householdID, households.get(husband.householdID).size(), "married", wife.x, wife.y, wife.vx, wife.vy, 
-          wife.diameter, wife.area, wife.trade, wife.gender, wife.father, wife.mother, husband, wife.age);
-
-          households.get(wife.householdID).remove(wife);
-          tempwife.householdID = husband.householdID;
-          //    ArrayList<Person> newhousehold = new ArrayList<Person>();
-          //     newhousehold.add(tempwife);
-          //    newhousehold.add(temphusband);
-          //    households.add(newhousehold);
-          // numhouseholds++;
-          households.get(husband.householdID).add(tempwife);
-          husband.status = "married";
-          husband.spouse = tempwife;
-          Person[] newcouple = {
-            husband, tempwife
-          };
-          couples.add(newcouple);
-          println("couple added");
-        }
-      }
-
-      // println("couples: " + couples);
 
       //CHILDBIRTH
-      for (int i = 0; i < couples.size(); i++)
-      {
-        // println("couple #:" + i);
-        // print(couples.get(i)[0]);
-        // print(couples.get(i)[1]);
-
-        Person father = couples.get(i)[0];
-        Person mother = couples.get(i)[1];
-
-
-        if (mother.age <= MOTHERMAXAGE && father.age <= FATHERMAXAGE)
-        {
-          if (random(1) <= FERTILITYRATE)
-          {
-            Person baby = new Person(mother.householdID, households.get(mother.householdID).size(), "unmarried", mother.x, mother.y, mother.vx, mother.vy, 
-            mother.diameter, mother.area, father.trade, genders[int(random(0, 2))], father, mother, null, 0);
-            households.get(mother.householdID).add(baby);
-          }
-        }
-      }
+      childbirth();
     }
 
     showPopulation();
