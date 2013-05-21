@@ -1,6 +1,5 @@
 boolean pause = false;
 
-
 //constants set in Utopia
 int FEMALEMARRIAGEAGE = 18;
 int MALEMARRIAGEAGE = 22;
