@@ -92,7 +92,6 @@ void draw() {
 
   if (pause == true)
   {
-
     showPopulation();
   }
   else
@@ -122,6 +121,7 @@ void draw() {
           population++;
           Person curr;
           curr = ((Person)((households.get(i)).get(j)));
+          
           if (curr.gender == "m")
             malepop++;
           else
@@ -129,33 +129,13 @@ void draw() {
           curr.age++;
 
 
-          //fill list of eligible bachelors and bachelorettes
-          if (curr.status == "unmarried")
-          {
-            if (curr.gender == "f" && curr.age >= FEMALEMARRIAGEAGE)
-            {
-              bachelorettes.add(curr);
-              // print("added bachelorette\n");
-            }
-            else if (curr.gender == "m" && curr.age >= MALEMARRIAGEAGE)
-            {
-              bachelors.add(curr);
-              //  print("added bachelor\n");
-            }
-          }
-          
+          fillEligibleList(curr);        
           death(curr);
-
-
         }
       }
       marriage();
-
-
-      //CHILDBIRTH
       childbirth();
     }
-
     showPopulation();
   }
 }
