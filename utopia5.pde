@@ -11,7 +11,7 @@ int MAXHOUSEHOLDSIZE = 16;
 
 //our counters
 int year = 0;
-int TIMEINTERVAL = 1500;
+int TIMEINTERVAL = 500;
 int lastTime = 0;
 int malepop = 0;
 int femalepop = 0;
@@ -23,7 +23,7 @@ int showingfam = -1; // on-off for info display
 int showingmember = -1;
 
 //constants we set 
-int INIThouseholds = 2; // num households should actually range from 1 to 6000
+int INIThouseholds = 4; // num households should actually range from 1 to 6000
 float MARRIAGEPROB = 1;
 int MOTHERMAXAGE = 45;
 int FATHERMAXAGE = 70;
@@ -85,54 +85,15 @@ void draw() {
   text("Households: " + households.size(), 150, 160);
   text("married couples: "+couples.size(), 150, 170);
 
+
   int ycoordinate = 200;
   int bachelorsy = 200;
   int bachelorettesy = 200;
 
   if (pause == true)
   {
-    //print bachelors
-    for (int i = 0; i < bachelors.size(); i++)
-    {
-      text(" householdID:" + ((Person)(bachelors.get(i))).householdID +
-        " member:" + ((Person)(bachelors.get(i))).member +
-        " gender:" + ((Person)(bachelors.get(i))).gender +
-        " status:" + ((Person)(bachelors.get(i))).status +
-        " age:" + ((Person)(bachelors.get(i))).age
-        , 600, bachelorsy);
-      bachelorsy += 15;
-    }
 
-    //print bachelorettes
-    for (int i = 0; i < bachelorettes.size(); i++)
-    {
-      text(" householdID:" + ((Person)(bachelorettes.get(i))).householdID +
-        " member:" + ((Person)(bachelorettes.get(i))).member +
-        " gender:" + ((Person)(bachelorettes.get(i))).gender +
-        " status:" + ((Person)(bachelorettes.get(i))).status +
-        " age:" + ((Person)(bachelorettes.get(i))).age
-        , 1000, bachelorettesy);
-      bachelorettesy += 15;
-    }
-
-    //print entire population
-    for (int i = 0; i < households.size(); i++)
-    {
-      //ArrayList curr = households.get(i);
-      //println(curr.size());
-      for (int j = 0; j < households.get(i).size(); j++)
-      {
-
-        ((Person)((households.get(i)).get(j))).member = j;
-        text(" householdID:" + ((Person)((households.get(i)).get(j))).householdID +
-          " member:" + ((Person)((households.get(i)).get(j))).member +
-          " gender:" + ((Person)((households.get(i).get(j)))).gender +
-          " status:" + ((Person)((households.get(i).get(j)))).status +
-          " age:" + ((Person)((households.get(i).get(j)))).age
-          , 200, ycoordinate);
-        ycoordinate += 15;
-      }
-    }
+    showPopulation();
   }
   else
   {
@@ -187,15 +148,16 @@ void draw() {
             households.get(curr.householdID).remove(curr);
         }
       }
-
       //SET ANNUAL MARRIAGE RATE HERE.
-      // right now, there are numhouseholds/2 happening every year
-      for (int i = 0; i < numhouseholds/2; i++)
+      // right now, there are numhouseholds/4 happening every year
+      for (int i = 0; i < numhouseholds/4; i++)
       {
         wife = null;
         husband = null;
         findCouple();
-
+        println("marriage");
+        println(wife);
+        println(husband);
         //marry the pair we chose, start a new household
         if (husband != null && wife != null)
         {
@@ -219,23 +181,26 @@ void draw() {
           households.get(husband.householdID).add(tempwife);
           husband.status = "married";
           husband.spouse = tempwife;
-          Person[] newcouple = {husband, tempwife};
+          Person[] newcouple = {
+            husband, tempwife
+          };
           couples.add(newcouple);
+          println("couple added");
         }
       }
 
-      println("couples: " + couples);
-      //childbirth FIX THIS
-      
+      // println("couples: " + couples);
+
+      //CHILDBIRTH
       for (int i = 0; i < couples.size(); i++)
       {
-        println("couple #:" + i);
-        print(couples.get(i)[0]);
-        print(couples.get(i)[1]);
-        
+        // println("couple #:" + i);
+        // print(couples.get(i)[0]);
+        // print(couples.get(i)[1]);
+
         Person father = couples.get(i)[0];
         Person mother = couples.get(i)[1];
-        
+
 
         if (mother.age <= MOTHERMAXAGE && father.age <= FATHERMAXAGE)
         {
@@ -249,47 +214,58 @@ void draw() {
       }
     }
 
-    //print bachelors
-    for (int i = 0; i < bachelors.size(); i++)
-    {
-      text(" householdID:" + ((Person)(bachelors.get(i))).householdID +
-        " member:" + ((Person)(bachelors.get(i))).member +
-        " gender:" + ((Person)(bachelors.get(i))).gender +
-        " status:" + ((Person)(bachelors.get(i))).status +
-        " age:" + ((Person)(bachelors.get(i))).age
-        , 600, bachelorsy);
-      bachelorsy += 15;
-    }
+    showPopulation();
+  }
+}
 
-    //print bachelorettes
-    for (int i = 0; i < bachelorettes.size(); i++)
-    {
-      text(" householdID:" + ((Person)(bachelorettes.get(i))).householdID +
-        " member:" + ((Person)(bachelorettes.get(i))).member +
-        " gender:" + ((Person)(bachelorettes.get(i))).gender +
-        " status:" + ((Person)(bachelorettes.get(i))).status +
-        " age:" + ((Person)(bachelorettes.get(i))).age
-        , 1000, bachelorettesy);
-      bachelorettesy += 15;
-    }
 
-    //print entire population
-    for (int i = 0; i < households.size(); i++)
-    {
-      //ArrayList curr = households.get(i);
-      //println(curr.size());
-      for (int j = 0; j < households.get(i).size(); j++)
-      {
+void showPopulation()
+{ 
+  int ycoordinate = 200;
+  int bachelorsy = 200;
+  int bachelorettesy = 200;
 
-        ((Person)((households.get(i)).get(j))).member = j;
-        text(" householdID:" + ((Person)((households.get(i)).get(j))).householdID +
-          " member:" + ((Person)((households.get(i)).get(j))).member +
-          " gender:" + ((Person)((households.get(i).get(j)))).gender +
-          " status:" + ((Person)((households.get(i).get(j)))).status +
-          " age:" + ((Person)((households.get(i).get(j)))).age
-          , 200, ycoordinate);
-        ycoordinate += 15;
-      }
+  //print bachelors
+  for (int i = 0; i < bachelors.size(); i++)
+  {
+    text(" householdID:" + ((Person)(bachelors.get(i))).householdID +
+      " member:" + ((Person)(bachelors.get(i))).member +
+      " gender:" + ((Person)(bachelors.get(i))).gender +
+      " status:" + ((Person)(bachelors.get(i))).status +
+      " age:" + ((Person)(bachelors.get(i))).age
+      , 600, bachelorsy);
+    bachelorsy += 15;
+  }
+
+
+  //print bachelorettes
+  for (int i = 0; i < bachelorettes.size(); i++)
+  {
+    text(" householdID:" + ((Person)(bachelorettes.get(i))).householdID +
+      " member:" + ((Person)(bachelorettes.get(i))).member +
+      " gender:" + ((Person)(bachelorettes.get(i))).gender +
+      " status:" + ((Person)(bachelorettes.get(i))).status +
+      " age:" + ((Person)(bachelorettes.get(i))).age
+      , 1000, bachelorettesy);
+    bachelorettesy += 15;
+  }
+
+  //print entire population
+  for (int i = 0; i < households.size(); i++)
+  {
+    //ArrayList curr = households.get(i);
+    //println(curr.size());
+    for (int j = 0; j < households.get(i).size(); j++)
+    {
+
+      ((Person)((households.get(i)).get(j))).member = j;
+      text(" householdID:" + ((Person)((households.get(i)).get(j))).householdID +
+        " member:" + ((Person)((households.get(i)).get(j))).member +
+        " gender:" + ((Person)((households.get(i).get(j)))).gender +
+        " status:" + ((Person)((households.get(i).get(j)))).status +
+        " age:" + ((Person)((households.get(i).get(j)))).age
+        , 200, ycoordinate);
+      ycoordinate += 15;
     }
   }
 }
