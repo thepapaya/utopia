@@ -1,9 +1,11 @@
+// Person is defined by its attributes (listed at the 
+// beginning of the class definition) and is constructed
+// given values for each of these attributes
+
 public class Person
 {
-
-
   int householdID;
-  int member;
+  int member; //no one has the same member number
   String status;
   float x, y, vx, vy;
   float diameter;
@@ -13,10 +15,11 @@ public class Person
   String gender; 
   Person father;
   Person mother;
+  Person spouse;
   int age;
 
   Person(int householdID, int member, String status, float x, float y, float vx, float vy, float diameter, int area, 
-  String trade, String gender, Person father, Person mother, int age)
+  String trade, String gender, Person father, Person mother, Person spouse, int age)
   {
     this.householdID = householdID;
     this.member = member;
@@ -32,12 +35,8 @@ public class Person
     this.gender = gender;  
     this.father = father;
     this.mother = mother;
+    this.spouse = spouse;
     this.age = age;
-  }
-
-  int getAge()
-  {
-    return age;
   }
 
   void display()
