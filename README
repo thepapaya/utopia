@@ -1,2 +1,38 @@
 Processing project turning Sir Thomas More's Utopia into an interactive simulation
 Spring 2013
+
+
+Utopia Project
+Radcliffe Institute Spring 2013
+by Jenny Ye
+May 21, 2013
+
+
+Problem & Approach
+Our goal is to model the world of Thomas More’s Utopia, which outlines a list of rules and norms for a fictional world called Utopia. Within this world, there are specific guidelines on population dynamics, work, politics, etc. 
+
+Using Processing, an open source programming language built on Java and designed for visualizations, I approached the problem of population dynamics in a “top-down” way. By “top-down,” I mean that everything from marriage to childbirth to moving to new households is calculated at a system wide level. At each unit of time, all eligible bachelors/bachelorettes and married couples are considered for marriage and childbirth respectively. 
+
+The major benefit of this approach is that it is relatively cheap computationally and pretty easily implements system wide dynamics. Functions right now are at most O(n), which means that we do one thing for each Person rather than O(n^2), which means looking through each Person for each Person (to find a couple for example).
+
+Results
+Currently, the population dynamics of Utopia are for the most part implemented. Marriage is simulated according to a marriage rate among couples of the required ages set by Utopia. Children are born to couples according to ages set by us (in the global variables of utopia.pde), and people in the population die according to the LIFEEXPECTANCY set by us. Each Person has a trade, usually their father’s trade, and this is tallied in the global variables. 
+
+Code
+Currently, the program is divided into three files: utopia.pde, Person.pde and population.pde. To run the Processing simulation, make sure all three files are in the same folder and press Play on the utopia.pde file. 
+
+utopia.pde
+is the main file that calls all other functions. It is organized like a standard Processing file, with a one-time setup() function and a continuous draw() function. At the top of the file is a list of constants and counters, organized by who defines them (More’s Utopia, or us). The pause boolean is used to keep track of whether or not the user has signaled to pause the program. The key for this is defined in keyPressed(), a function in utopia.pde. To keep track of households, bachelors, bachelorettes and couples, I’ve used the Java data structure ArrayList because it is easy to add and remove from them. 
+
+The functions called in utopia.pde, except for millis(), and ArrayList functions like get() and size() and remove() are all defined in population.pde.
+
+Person.pde
+is the definition and constructor function of the Person class. A Person’s attributes are listed at the beginning of the class definition, and the constructor is noted by  Person(int householdID, int member, String status, float x, float y, float vx, float vy, float diameter, int area, String trade, String gender, Person father, Person mother, Person spouse, int age) which takes a list of attributes and creates a new Person with them. display(), move(), and showText() are reserved for a future visualization of Person. 
+
+population.pde
+is a list of functions having to do with the population dynamics of Utopia. These are organized alphabetically, and called from the utopia.pde file. They interact with global variables defined in utopia.pde as well as individual Persons that are passed into the function (like in tallyGender(Person curr)) for example. 
+
+Next Steps
+The next step in population dynamics is to simulate country households and facilitate the emigration between households once households reach their maximum size. Besides population dynamics, there are many different aspects of Utopia to simulate. These include work, politics, social affairs, and leisure among others. Expanding on the implementation of work seems like the best next step because of its importance in the world of Utopia. Take a look at notes here to look at references in Utopia.
+
+
