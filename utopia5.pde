@@ -56,6 +56,7 @@ ArrayList<ArrayList> households = new ArrayList<ArrayList>();
 ArrayList<Person> bachelorettes = new ArrayList<Person>();
 ArrayList<Person> bachelors = new ArrayList<Person>();
 ArrayList<Person []> couples = new ArrayList<Person []>();
+
 //PImage img;
 
 
@@ -72,7 +73,12 @@ void setup()
   startHouseholds();
 }
 
-//continuously runs until program is cancelled 
+// draw() is run continuously until program is cancelled 
+// it displays the updated stats as text on the screen 
+// and when 'pause' is not true, it updates the age and tally
+// of each person, and also runs the marriage(), death(Person curr)
+// and childbirth() functions at every preset time interval
+
 void draw() {
   //background(img);
   background(255);
@@ -129,6 +135,8 @@ void draw() {
           population++;
           Person curr;
           curr = ((Person)((households.get(i)).get(j)));
+          
+          
           tallyGender(curr);
           curr.age++;
           countTrades(curr);
@@ -145,9 +153,9 @@ void draw() {
 
 
 
-
 // keyPressed() keeps track of whether the user
 // has pressed the ENTER key. if yes, the program will pause/resume
+
 void keyPressed()
 {
   if (keyCode == ENTER)
